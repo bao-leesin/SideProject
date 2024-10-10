@@ -1,6 +1,6 @@
 ﻿using Serilog;
 using Serilog.Sinks.Elasticsearch;
-using Service.Configuration;
+using WebAPI.Configuration;
 
 namespace WebAPI.DependencyInjection
 {

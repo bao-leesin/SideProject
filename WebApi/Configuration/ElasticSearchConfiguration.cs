@@ -1,4 +1,4 @@
-﻿namespace Service.Configuration
+﻿namespace WebAPI.Configuration
 {
     public class ElasticSearchConfiguration
     {
