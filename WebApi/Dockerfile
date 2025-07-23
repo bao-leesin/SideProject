@@ -1,12 +1,13 @@
-FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
 WORKDIR /app
 EXPOSE 5000
 
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
 COPY . .
-RUN dotnet restore
-RUN dotnet publish -c Release -o /app/publish
+WORKDIR /src/WebApi
+RUN dotnet restore WebAPI.csproj
+RUN dotnet publish WebAPI.csproj -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
