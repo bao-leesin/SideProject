@@ -1,5 +1,4 @@
-﻿using Data.Repositories;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 
 namespace Data.DependencyInjection
 {
@@ -7,7 +6,6 @@ namespace Data.DependencyInjection
     {
         public static IServiceCollection AddCustomServices(this IServiceCollection services)
         {
-            services.AddScoped<IAccountRepository, AccountRepository>();
             return services;
         }
     }
