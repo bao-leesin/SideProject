@@ -1,4 +1,5 @@
 using System;
+using Service.DTOs.Common;
 
 namespace Service.DTOs
 {
@@ -15,6 +16,7 @@ namespace Service.DTOs
         public DateTime? CreatedDate { get; set; }
         public DateTime? LastSyncDate { get; set; }
         public string? SyncStatus { get; set; }
+        public Status Status { get; set; }
     }
     public class PartnerAuthConfigDto : BaseDto
     {
@@ -58,5 +60,27 @@ namespace Service.DTOs
         public string? ProductPublishedDate { get; set; }
         public int? PartnerId { get; set; }
         public PartnerDto? Partner { get; set; }
+    }
+    // --- Request DTOs ---
+    public class CreatePartnerDto
+    {
+        public string Name { get; set; } = string.Empty;
+        public string? Description { get; set; }
+        public string? ContactInfo { get; set; }
+        public Status Status { get; set; } = Status.Active;
+    }
+    public class UpdatePartnerDto
+    {
+        public int Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string? Description { get; set; }
+        public string? ContactInfo { get; set; }
+        public Status Status { get; set; }
+    }
+
+    public class GetPartnerRequest : PagingRequest
+    {
+        public string? SearchTerm { get; set; }
+        public Status? Status { get; set; }
     }
 } 

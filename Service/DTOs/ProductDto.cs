@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Service.DTOs.Common;
 
 namespace Service.DTOs
 {
@@ -18,6 +19,7 @@ namespace Service.DTOs
         public DateTime CreatedDate { get; set; }
         public List<ProductCategoryDto>? Categories { get; set; }
         public List<ProductTagDto>? Tags { get; set; }
+        public Status Status { get; set; }
     }
     public class ProductCategoryDto
     {
@@ -33,4 +35,34 @@ namespace Service.DTOs
         public ProductDto? Product { get; set; }
     }
     public enum ProductType { Type1, Type2 }
+
+    // --- Request DTOs ---
+    public class CreateProductDto
+    {
+        public string Name { get; set; } = string.Empty;
+        public string? Description { get; set; }
+        public decimal Price { get; set; }
+        public int CategoryId { get; set; }
+        public Status Status { get; set; } = Status.Active;
+    }
+    public class UpdateProductDto
+    {
+        public int Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string? Description { get; set; }
+        public decimal Price { get; set; }
+        public int CategoryId { get; set; }
+        public Status Status { get; set; }
+    }
+    public class DeleteMultiProductsDto
+    {
+        public List<int> Ids { get; set; } = new List<int>();
+    }
+
+    public class GetProductRequest : PagingRequest
+    {
+        public string? SearchTerm { get; set; }
+        public int? CategoryId { get; set; }
+        public Status? Status { get; set; }
+    }
 } 
