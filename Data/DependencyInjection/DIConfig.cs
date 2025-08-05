@@ -10,7 +10,11 @@ namespace Data.DependencyInjection
         {
             // Register the DbContext with the connection string from configuration
             services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(
+                    configuration.GetConnectionString("DefaultConnection"),
+                    b => b.MigrationsAssembly("Data")
+                )
+            );
         }
     }
 }
