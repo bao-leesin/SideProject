@@ -1,5 +1,5 @@
 using System;
-using Data.Common;
+using Domain.Common;
 
 public class Partner : EntityBase
 {

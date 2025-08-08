@@ -1,4 +1,4 @@
-using Data.Common;
+using Domain.Common;
 
 public class Province : EntityBase
 {

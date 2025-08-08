@@ -12,6 +12,11 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+//cache
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddResponseCaching();
+builder.Services.AddMemoryCache();
+
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 WebAPI.DependencyInjection.DIConfig.ConfigureServices(builder.Services, builder.Configuration);
 Data.DependencyInjection.DIConfig.ConfigureServices(builder.Services, builder.Configuration);

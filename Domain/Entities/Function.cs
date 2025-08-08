@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using Data.Common;
+using Domain.Common;
 
 public class Function : EntityBase
 {

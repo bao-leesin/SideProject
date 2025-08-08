@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Data.Common
+namespace Domain.Common
 {
     public abstract class EntityBase
     {

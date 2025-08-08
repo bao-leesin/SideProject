@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Data.Common;
+using Domain.Common;
 
 public class Product : EntityBase
 {

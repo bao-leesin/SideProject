@@ -25,6 +25,8 @@ namespace WebAPI.DependencyInjection
                     IndexFormat = "logstash-{0:yyyy.MM.dd}"
                 })
                 .CreateLogger();
+
+
         }
     }
 }
