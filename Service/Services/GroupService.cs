@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Caching.Memory;
 using Service.DTOs;
 using Service.DTOs.Common;
 using Service.Interfaces;
@@ -34,7 +35,6 @@ namespace Service.Services
 
             return new GroupDto
             {
-                Id = Guid.NewGuid().ToString(), // Replace with actual ID from database
                 // Map other properties from createDto
             };
         }
@@ -68,7 +68,6 @@ namespace Service.Services
             // 4. Return updated DTO
             return new GroupDto
             {
-                Id = id,
                 // Map updated properties
             };
         }
@@ -103,7 +102,6 @@ namespace Service.Services
             // 5. Return updated DTO
             return new GroupDto
             {
-                Id = id,
                 // Map updated properties including functions
             };
         }
@@ -137,7 +135,6 @@ namespace Service.Services
             // 4. Return updated DTO
             return new GroupDto
             {
-                Id = id,
                 // Map updated properties
             };
         }
@@ -188,7 +185,6 @@ namespace Service.Services
             // 2. Map to DTO and return
             return new GroupDto
             {
-                Id = id,
                 // Map other properties including functions
             };
         }
@@ -203,7 +199,7 @@ namespace Service.Services
 
             // 1. Build query based on request parameters
             // var query = _groupRepository.GetQueryable();
-            
+
             // Apply filters based on request
             // if (!string.IsNullOrEmpty(request.Name))
             // {
@@ -226,10 +222,7 @@ namespace Service.Services
 
             return new PagedResult<GroupDto>
             {
-                Data = new List<GroupDto>(), // Replace with mapped data
-                TotalCount = 0, // Replace with actual count
-                Page = request.Page ?? 1,
-                PageSize = request.PageSize ?? 10
+                
             };
         }
     }

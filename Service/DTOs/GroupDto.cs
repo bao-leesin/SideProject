@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Service.DTOs.Common;
 
 namespace Service.DTOs
@@ -7,7 +6,7 @@ namespace Service.DTOs
     {
         public string? Name { get; set; }
         public string? Description { get; set; }
-        public Data.Common.Status Status { get; set; }
+        public Status Status { get; set; }
         public List<GroupFunctionDto>? Functions { get; set; }
     }
     public class GroupFunctionDto
@@ -23,7 +22,7 @@ namespace Service.DTOs
     {
         public string Name { get; set; } = string.Empty;
         public string? Description { get; set; }
-        public Data.Common.Status Status { get; set; } = Data.Common.Status.Active;
+        public Status Status { get; set; } = Status.Active;
     }
     public class UpdateGroupNameDto
     {
@@ -37,12 +36,12 @@ namespace Service.DTOs
     }
     public class UpdateGroupStatusDto
     {
-        public Data.Common.Status Status { get; set; }
+        public Status Status { get; set; }
     }
 
     public class GetGroupRequest : PagingRequest
     {
         public string? SearchTerm { get; set; }
-        public Data.Common.Status? Status { get; set; }
+        public Status Status { get; set; }
     }
 } 
