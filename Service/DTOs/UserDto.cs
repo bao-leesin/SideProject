@@ -14,7 +14,7 @@ namespace Service.DTOs
         public string? Province { get; set; }
         public string? TaxCode { get; set; }
         public string? DeviceId { get; set; }
-        public Data.Common.Status Status { get; set; }
+        public Status Status { get; set; }
         public int? GroupId { get; set; }
         public GroupDto? Group { get; set; }
         public UserRole Role { get; set; }
@@ -81,7 +81,7 @@ namespace Service.DTOs
     }
     public class UserUpdateStatusDto
     {
-        public Data.Common.Status Status { get; set; }
+        public Status Status { get; set; }
     }
     public class UserUpdateGroupIdDto
     {
@@ -102,7 +102,7 @@ namespace Service.DTOs
     public class GetUsersRequest : PagingRequest
     {
         public string? SearchTerm { get; set; }
-        public Data.Common.Status? Status { get; set; }
+        public Status? Status { get; set; }
         public UserRole? Role { get; set; }
         public int? GroupId { get; set; }
     }
