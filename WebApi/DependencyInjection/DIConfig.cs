@@ -1,8 +1,7 @@
 ﻿using Minio;
 using Serilog.Sinks.Elasticsearch;
 using Serilog;
-using Service.Interfaces;
-using WebAPI.Configuration;
+using Infrastructure.Configuration;
 
 namespace WebAPI.DependencyInjection
 {
@@ -40,6 +39,10 @@ namespace WebAPI.DependencyInjection
                     .WithCredentials(minioSettings.AccessKey, minioSettings.SecretKey)
                     .WithSSL(minioSettings.WithSSL);
             });
+
+            var rabbitSettings = new RabbitMqConfiguration();
+            configuration.GetSection(nameof(RabbitMqConfiguration)).Bind(rabbitSettings);
+            services.AddSingleton(rabbitSettings);
         }
 
     }

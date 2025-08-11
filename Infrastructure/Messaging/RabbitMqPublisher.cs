@@ -1,55 +1,56 @@
-﻿using RabbitMQ.Client;
-using Application.Messaging;
+﻿using Infrastructure.Configuration;
+using RabbitMQ.Client;
+using System.Text;
+using System.Text.Json;
 
-namespace Infrastructure.Messaging
+public class RabbitMqPublisher : IAsyncDisposable
 {
-    public class RabbitMqPublisher : IMQPublisher, IAsyncDisposable
+    private readonly RabbitMqConfiguration _config;
+    private readonly IConnection _connection;
+    private readonly IChannel _channel;
+
+    public RabbitMqPublisher(RabbitMqConfiguration config)
     {
-        private readonly ConnectionFactory _factory;
-        private IConnection? _connection;
-        private IChannel? _channel;
+        _config = config;
 
-        public RabbitMqPublisher(string hostName, string userName, string password)
+        var factory = new ConnectionFactory
         {
-            _factory = new ConnectionFactory()
-            {
-                HostName = hostName,
-                UserName = userName,
-                Password = password
-            };
-        }
+            HostName = _config.HostName,
+            Port = _config.Port,
+            UserName = _config.UserName,
+            Password = _config.Password
+        };
 
-        private async Task EnsureConnectionAsync()
-        {
-            if (_connection == null)
-            {
-                _connection = await _factory.CreateConnectionAsync();
-                _channel = await _connection.CreateChannelAsync();
-            }
-        }
+        _connection = factory.CreateConnectionAsync().GetAwaiter().GetResult();
+        _channel = _connection.CreateChannelAsync().GetAwaiter().GetResult();
 
-        public async Task PublishAsync(string queueName, byte[] message)
-        {
-            await EnsureConnectionAsync();
+        // Declare the queue once when the publisher is created
+        _channel.QueueDeclareAsync(
+            queue: _config.QueueName,
+            durable: true,
+            exclusive: false,
+            autoDelete: false
+        ).GetAwaiter().GetResult();
+    }
 
-            await _channel!.QueueDeclareAsync(
-                queue: queueName,
-                durable: true,
-                exclusive: false,
-                autoDelete: false,
-                arguments: null);
+    public async Task PublishAsync(object message)
+    {
+        var body = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(message));
 
-            await _channel.BasicPublishAsync(
-                exchange: "",
-                routingKey: queueName,
-                mandatory: false,
-                body: message);
-        }
+        var props = new BasicProperties { DeliveryMode = DeliveryModes.Persistent };
 
-        public async ValueTask DisposeAsync()
-        {
-            if (_channel != null) await _channel.DisposeAsync();
-            if (_connection != null) await _connection.DisposeAsync();
-        }
+        await _channel.BasicPublishAsync(
+            exchange: "",
+            routingKey: _config.QueueName,
+            mandatory: false,
+            basicProperties: props,
+            body: body
+        );
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (_channel != null) await _channel.DisposeAsync();
+        if (_connection != null) await _connection.DisposeAsync();
     }
 }

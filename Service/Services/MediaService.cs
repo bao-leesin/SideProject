@@ -1,25 +1,50 @@
-﻿using Service.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Domain.Messaging;
+using Microsoft.AspNetCore.Http;
+using Service.Interfaces;
 
-namespace Service.Services
+public class MediaService : IMediaService
 {
-    internal class MediaService : IMediaService
+    private readonly RabbitMqPublisher _publisher;
+
+    public MediaService(RabbitMqPublisher publisher)
     {
-        public Task UploadImageAsync(string filePath, string fileName, string contentType, string folderPath)
+        _publisher = publisher;
+    }
+
+    public async Task<object> UploadFileAsync(IFormFile file)
+    {
+        try
         {
-            throw new NotImplementedException();
+            var fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
+            var objectName = $"uploads/{fileName}";
+
+            var tempPath = Path.Combine(Path.GetTempPath(), fileName);
+            using (var fs = new FileStream(tempPath, FileMode.Create, FileAccess.Write))
+            {
+                await file.CopyToAsync(fs);
+            }
+
+            var message = new MediaMessage(
+                TempPath: tempPath,
+                ObjectName: objectName,
+                ContentType: file.ContentType ?? "application/octet-stream",
+                Size: file.Length
+            );
+
+            await _publisher.PublishAsync(message);
+
+            return new
+            {
+                success = true,
+                fileName,
+                originalName = file.FileName,
+                path = objectName,
+                status = "Queued"
+            };
         }
-        public Task UploadVideoAsync()
+        catch (Exception ex)
         {
-            throw new NotImplementedException();
-        }
-        public Task DeleteFileAsync(string fileUrl)
-        {
-            throw new NotImplementedException();
+            throw new Exception($"Upload request failed: {ex.Message}");
         }
     }
 }

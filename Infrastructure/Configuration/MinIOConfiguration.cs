@@ -1,5 +1,5 @@
-﻿namespace WebAPI.Configuration
-{
+﻿namespace Infrastructure.Configuration
+    {
     public class MinIOConfiguration
     {
         public string Endpoint { get; set; }

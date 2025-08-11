@@ -33,5 +33,3 @@ public class ProductTag : EntityBase
     public int ProductId { get; set; }
     public Product? Product { get; set; }
 }
-
-public enum ProductType { Type1, Type2 } 

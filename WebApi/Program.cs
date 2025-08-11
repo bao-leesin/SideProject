@@ -1,11 +1,10 @@
-using Serilog;
 using Service.DependencyInjection;
 using WebAPI.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
 
-builder.Services.AddLogging(builder => builder.AddSerilog(dispose: true));
+//builder.Services.AddLogging(builder => builder.AddSerilog(dispose: true));
 
 // Add services to the container.
 builder.Services.AddControllers();
