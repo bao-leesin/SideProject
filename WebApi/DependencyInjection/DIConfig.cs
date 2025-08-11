@@ -1,5 +1,7 @@
-﻿using Serilog;
+﻿using Minio;
 using Serilog.Sinks.Elasticsearch;
+using Serilog;
+using Service.Interfaces;
 using WebAPI.Configuration;
 
 namespace WebAPI.DependencyInjection
@@ -8,25 +10,37 @@ namespace WebAPI.DependencyInjection
     {
         public static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
-            // Bind configuration
+            // ===== Existing Elasticsearch config =====
             var elasticConfiguration = new ElasticSearchConfiguration();
             configuration.GetSection(nameof(ElasticSearchConfiguration)).Bind(elasticConfiguration);
-            if (elasticConfiguration.Uri == null)
+            if (elasticConfiguration.Uri != null)
             {
-                return;
+                services.AddSingleton(elasticConfiguration);
+
+                Log.Logger = new LoggerConfiguration()
+                    .Enrich.FromLogContext()
+                    .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(elasticConfiguration.Uri))
+                    {
+                        AutoRegisterTemplate = true,
+                        IndexFormat = "logstash-{0:yyyy.MM.dd}"
+                    })
+                    .CreateLogger();
             }
-            services.AddSingleton<ElasticSearchConfiguration>(elasticConfiguration);
-            // Configure Serilog
-            Log.Logger = new LoggerConfiguration()
-                .Enrich.FromLogContext()
-                .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(elasticConfiguration.Uri))
-                {
-                    AutoRegisterTemplate = true,
-                    IndexFormat = "logstash-{0:yyyy.MM.dd}"
-                })
-                .CreateLogger();
 
+            // ===== MinIO config =====
+            var minioSettings = new MinIOConfiguration();
+            configuration.GetSection(nameof(MinIOConfiguration)).Bind(minioSettings);
 
+            services.AddSingleton(minioSettings);
+
+            services.AddSingleton(sp =>
+            {
+                return new MinioClient()
+                    .WithEndpoint(minioSettings.Endpoint)
+                    .WithCredentials(minioSettings.AccessKey, minioSettings.SecretKey)
+                    .WithSSL(minioSettings.WithSSL);
+            });
         }
+
     }
 }
