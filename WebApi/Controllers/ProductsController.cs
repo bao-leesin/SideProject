@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using Service.DTOs;
 using Service.Interfaces;
+using Service.Interfaces.CoreService;
 using System.Threading.Tasks;
 
 namespace WebAPI.Controllers
@@ -10,10 +12,13 @@ namespace WebAPI.Controllers
     public class ProductsController : ControllerBase
     {
         private readonly IProductService _productService;
+        private readonly IMediaService _mediaService;
 
-        public ProductsController(IProductService productService)
+        public ProductsController(
+            IProductService productService, IMediaService mediaService)
         {
             _productService = productService;
+            _mediaService = mediaService;
         }
 
         [HttpPost]
@@ -24,14 +29,14 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateProduct(string id, [FromBody] UpdateProductDto updateDto)
+    public async Task<IActionResult> UpdateProduct(int id, [FromBody] UpdateProductDto updateDto)
         {
             var result = await _productService.UpdateProductAsync(id, updateDto);
             return Ok(result);
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteProduct(string id)
+    public async Task<IActionResult> DeleteProduct(int id)
         {
             await _productService.DeleteProductAsync(id);
             return NoContent();
@@ -45,7 +50,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetProductById(string id)
+    public async Task<IActionResult> GetProductById(int id)
         {
             var result = await _productService.GetProductByIdAsync(id);
             return Ok(result);
@@ -57,5 +62,19 @@ namespace WebAPI.Controllers
             var result = await _productService.SearchProductsAsync(request);
             return Ok(result);
         }
+
+        [HttpPost("upload-media")]
+        public async Task<IActionResult> UploadProductImage([FromForm] IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+            {
+                return BadRequest("No file uploaded.");
+            }
+
+            await _mediaService.UploadVideoAsync();
+            return NoContent();
+        }
+
+      
     }
 } 

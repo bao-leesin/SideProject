@@ -2,7 +2,7 @@ using Service.DTOs;
 using Service.DTOs.Common;
 using System.Threading.Tasks;
 
-namespace Service.Interfaces
+namespace Service.Interfaces.CoreService
 {
     public interface IUserService
     {
@@ -20,4 +20,4 @@ namespace Service.Interfaces
         Task<PagedResult<UserDto>> GetUsersAsync(GetUsersRequest request);
         Task<UserDto> GetCurrentUserAsync();
     }
-} 
+}

@@ -1,9 +1,9 @@
 using Service.DTOs;
 using Service.DTOs.Common;
-using Service.Interfaces;
+using Service.Interfaces.CoreService;
 using System.Threading.Tasks;
 
-namespace Service.Services
+namespace Service.Services.CoreService
 {
     public class FunctionService : IFunctionService
     {
@@ -18,7 +18,7 @@ namespace Service.Services
             // _mapper = mapper;
         }
 
-        public async Task<FunctionDto> CreateFunctionAsync(CreateFunctionDto createDto)
+    public async Task<FunctionDto> CreateFunctionAsync(CreateFunctionDto createDto)
         {
             // TODO: Implement function creation logic
             if (createDto == null)
@@ -34,7 +34,7 @@ namespace Service.Services
 
             return new FunctionDto
             {
-                Id = Guid.NewGuid().ToString(), // Replace with actual ID from database
+                Id = 0,
                 // Map other properties from createDto
             };
         }
@@ -57,10 +57,10 @@ namespace Service.Services
             return results.ToArray();
         }
 
-        public async Task<FunctionDto> UpdateFunctionAsync(string id, UpdateFunctionDto updateDto)
+        public async Task<FunctionDto> UpdateFunctionAsync(int id, UpdateFunctionDto updateDto)
         {
             // TODO: Implement function update logic
-            if (string.IsNullOrEmpty(id))
+            if (id <= 0)
             {
                 throw new ArgumentException("Function ID is required");
             }
@@ -110,10 +110,10 @@ namespace Service.Services
             return results.ToArray();
         }
 
-        public async Task DeleteFunctionAsync(string id)
+        public async Task DeleteFunctionAsync(int id)
         {
             // TODO: Implement function deletion
-            if (string.IsNullOrEmpty(id))
+            if (id <= 0)
             {
                 throw new ArgumentException("Function ID is required");
             }
@@ -132,10 +132,10 @@ namespace Service.Services
             await Task.CompletedTask; // Placeholder
         }
 
-        public async Task<FunctionDto> GetFunctionByIdAsync(string id)
+        public async Task<FunctionDto> GetFunctionByIdAsync(int id)
         {
             // TODO: Implement get function by ID
-            if (string.IsNullOrEmpty(id))
+            if (id <= 0)
             {
                 throw new ArgumentException("Function ID is required");
             }
@@ -165,7 +165,7 @@ namespace Service.Services
 
             // 1. Build query based on request parameters
             // var query = _functionRepository.GetQueryable();
-            
+
             // Apply filters based on request
             // if (!string.IsNullOrEmpty(request.Name))
             // {
@@ -188,9 +188,9 @@ namespace Service.Services
 
             return new PagedResult<FunctionDto>
             {
-                Data = new List<FunctionDto>(), // Replace with mapped data
+                Items = new List<FunctionDto>(), // Replace with mapped data
                 TotalCount = 0, // Replace with actual count
-                Page = request.Page ?? 1,
+                PageNumber = request.PageNumber ?? 1,
                 PageSize = request.PageSize ?? 10
             };
         }

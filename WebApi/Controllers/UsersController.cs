@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Service.DTOs;
-using Service.Interfaces;
+using Service.Interfaces.CoreService;
 using System.Threading.Tasks;
 
 namespace WebAPI.Controllers

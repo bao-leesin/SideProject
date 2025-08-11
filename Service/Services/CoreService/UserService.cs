@@ -1,9 +1,9 @@
 using Service.DTOs;
 using Service.DTOs.Common;
-using Service.Interfaces;
+using Service.Interfaces.CoreService;
 using System.Threading.Tasks;
 
-namespace Service.Services
+namespace Service.Services.CoreService
 {
     public class UserService : IUserService
     {
@@ -219,9 +219,9 @@ namespace Service.Services
 
             return new PagedResult<UserDto>
             {
-                Data = new List<UserDto>(), // Replace with actual data
+                Items = new List<UserDto>(), // Replace with actual data
                 TotalCount = 0, // Replace with actual count
-                Page = request.Page ?? 1,
+                PageNumber = request.PageNumber ?? 1,
                 PageSize = request.PageSize ?? 10
             };
         }

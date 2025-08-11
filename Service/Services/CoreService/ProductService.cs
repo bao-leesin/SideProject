@@ -1,9 +1,9 @@
 using Service.DTOs;
 using Service.DTOs.Common;
-using Service.Interfaces;
+using Service.Interfaces.CoreService;
 using System.Threading.Tasks;
 
-namespace Service.Services
+namespace Service.Services.CoreService
 {
     public class ProductService : IProductService
     {
@@ -18,7 +18,7 @@ namespace Service.Services
             // _mapper = mapper;
         }
 
-        public async Task<ProductDto> CreateProductAsync(CreateProductDto createDto)
+    public async Task<ProductDto> CreateProductAsync(CreateProductDto createDto)
         {
             // TODO: Implement product creation logic
             if (createDto == null)
@@ -34,15 +34,15 @@ namespace Service.Services
 
             return new ProductDto
             {
-                Id = Guid.NewGuid().ToString(), // Replace with actual ID from database
+                Id = 0,
                 // Map other properties from createDto
             };
         }
 
-        public async Task<ProductDto> UpdateProductAsync(string id, UpdateProductDto updateDto)
+        public async Task<ProductDto> UpdateProductAsync(int id, UpdateProductDto updateDto)
         {
             // TODO: Implement product update logic
-            if (string.IsNullOrEmpty(id))
+            if (id <= 0)
             {
                 throw new ArgumentException("Product ID is required");
             }
@@ -73,10 +73,10 @@ namespace Service.Services
             };
         }
 
-        public async Task DeleteProductAsync(string id)
+        public async Task DeleteProductAsync(int id)
         {
             // TODO: Implement product deletion
-            if (string.IsNullOrEmpty(id))
+            if (id <= 0)
             {
                 throw new ArgumentException("Product ID is required");
             }
@@ -98,7 +98,7 @@ namespace Service.Services
         public async Task DeleteProductsAsync(DeleteMultiProductsDto deleteDto)
         {
             // TODO: Implement bulk product deletion
-            if (deleteDto?.Ids == null || deleteDto.Ids.Length == 0)
+            if (deleteDto?.Ids == null || deleteDto.Ids.Count == 0)
             {
                 throw new ArgumentException("Product IDs are required for deletion");
             }
@@ -109,10 +109,10 @@ namespace Service.Services
             }
         }
 
-        public async Task<ProductDto> GetProductByIdAsync(string id)
+        public async Task<ProductDto> GetProductByIdAsync(int id)
         {
             // TODO: Implement get product by ID
-            if (string.IsNullOrEmpty(id))
+            if (id <= 0)
             {
                 throw new ArgumentException("Product ID is required");
             }
@@ -142,7 +142,7 @@ namespace Service.Services
 
             // 1. Build query based on request parameters
             // var query = _productRepository.GetQueryable();
-            
+
             // Apply filters based on request
             // if (!string.IsNullOrEmpty(request.Name))
             // {
@@ -173,9 +173,9 @@ namespace Service.Services
 
             return new PagedResult<ProductDto>
             {
-                Data = new List<ProductDto>(), // Replace with mapped data
+                Items = new List<ProductDto>(), // Replace with mapped data
                 TotalCount = 0, // Replace with actual count
-                Page = request.Page ?? 1,
+                PageNumber = request.PageNumber ?? 1,
                 PageSize = request.PageSize ?? 10
             };
         }
