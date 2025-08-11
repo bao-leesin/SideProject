@@ -1,9 +1,9 @@
 using Service.DTOs;
 using Service.DTOs.Common;
-using Service.Interfaces;
+using Service.Interfaces.CoreService;
 using System.Threading.Tasks;
 
-namespace Service.Services
+namespace Service.Services.CoreService
 {
     public class CategoryService : ICategoryService
     {
@@ -18,7 +18,7 @@ namespace Service.Services
             // _mapper = mapper;
         }
 
-        public async Task<CategoryDto> CreateCategoryAsync(CreateCategoryDto createDto)
+    public async Task<CategoryDto> CreateCategoryAsync(CreateCategoryDto createDto)
         {
             // TODO: Implement category creation logic
             // 1. Validate input
@@ -36,7 +36,7 @@ namespace Service.Services
             // 4. Map back to DTO and return
             return new CategoryDto
             {
-                Id = Guid.NewGuid().ToString(), // Replace with actual ID from database
+                Id = 0,
                 // Map other properties from createDto
             };
         }
@@ -59,10 +59,10 @@ namespace Service.Services
             return results.ToArray();
         }
 
-        public async Task<CategoryDto> UpdateCategoryAsync(string id, UpdateCategoryDto updateDto)
+        public async Task<CategoryDto> UpdateCategoryAsync(int id, UpdateCategoryDto updateDto)
         {
             // TODO: Implement category update logic
-            if (string.IsNullOrEmpty(id))
+            if (id <= 0)
             {
                 throw new ArgumentException("Category ID is required");
             }
@@ -112,10 +112,10 @@ namespace Service.Services
             return results.ToArray();
         }
 
-        public async Task DeleteCategoryAsync(string id)
+        public async Task DeleteCategoryAsync(int id)
         {
             // TODO: Implement category deletion
-            if (string.IsNullOrEmpty(id))
+            if (id <= 0)
             {
                 throw new ArgumentException("Category ID is required");
             }
@@ -129,14 +129,14 @@ namespace Service.Services
 
             // 2. Delete category
             // await _categoryRepository.DeleteAsync(id);
-            
+
             await Task.CompletedTask; // Placeholder
         }
 
         public async Task DeleteCategoriesAsync(DeleteMultiCategoriesDto deleteDto)
         {
             // TODO: Implement bulk category deletion
-            if (deleteDto?.Ids == null || deleteDto.Ids.Length == 0)
+            if (deleteDto?.Ids == null || deleteDto.Ids.Count == 0)
             {
                 throw new ArgumentException("Category IDs are required for deletion");
             }
@@ -147,10 +147,10 @@ namespace Service.Services
             }
         }
 
-        public async Task<CategoryDto> GetCategoryByIdAsync(string id)
+        public async Task<CategoryDto> GetCategoryByIdAsync(int id)
         {
             // TODO: Implement get category by ID
-            if (string.IsNullOrEmpty(id))
+            if (id <= 0)
             {
                 throw new ArgumentException("Category ID is required");
             }
@@ -180,18 +180,24 @@ namespace Service.Services
 
             // 1. Build query based on request parameters
             // var query = _categoryRepository.GetQueryable();
-            
+
             // Apply filters based on request
-            // if (!string.IsNullOrEmpty(request.Name))
+            // if (!string.IsNullOrEmpty(request.SearchTerm))
             // {
-            //     query = query.Where(c => c.Name.Contains(request.Name));
+            //     query = query.Where(c => c.Name.Contains(request.SearchTerm));
+            // }
+            // if (request.ParentId.HasValue)
+            // {
+            //     query = query.Where(c => c.ParentId == request.ParentId);
             // }
 
             // 2. Apply pagination
             // var totalCount = await query.CountAsync();
+            // var pageNumber = request.PageNumber ?? 1;
+            // var pageSize = request.PageSize ?? 10;
             // var categories = await query
-            //     .Skip((request.Page - 1) * request.PageSize)
-            //     .Take(request.PageSize)
+            //     .Skip((pageNumber - 1) * pageSize)
+            //     .Take(pageSize)
             //     .ToListAsync();
 
             // 3. Map to DTOs
@@ -199,9 +205,9 @@ namespace Service.Services
 
             return new PagedResult<CategoryDto>
             {
-                Data = new List<CategoryDto>(), // Replace with mapped data
+                Items = new List<CategoryDto>(), // Replace with mapped data
                 TotalCount = 0, // Replace with actual count
-                Page = request.Page ?? 1,
+                PageNumber = request.PageNumber ?? 1,
                 PageSize = request.PageSize ?? 10
             };
         }

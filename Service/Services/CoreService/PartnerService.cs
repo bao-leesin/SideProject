@@ -1,9 +1,9 @@
 using Service.DTOs;
 using Service.DTOs.Common;
-using Service.Interfaces;
+using Service.Interfaces.CoreService;
 using System.Threading.Tasks;
 
-namespace Service.Services
+namespace Service.Services.CoreService
 {
     public class PartnerService : IPartnerService
     {
@@ -18,7 +18,7 @@ namespace Service.Services
             // _mapper = mapper;
         }
 
-        public async Task<PartnerDto> CreatePartnerAsync(CreatePartnerDto createDto)
+    public async Task<PartnerDto> CreatePartnerAsync(CreatePartnerDto createDto)
         {
             // TODO: Implement partner creation logic
             if (createDto == null)
@@ -34,16 +34,16 @@ namespace Service.Services
 
             return new PartnerDto
             {
-                Id = Guid.NewGuid().ToString(), // Replace with actual ID from database
+                Id = 0,
                 // Map other properties from createDto
-                CreatedAt = DateTime.UtcNow
+                CreatedDate = DateTime.UtcNow
             };
         }
 
-        public async Task<PartnerDto> UpdatePartnerAsync(string id, UpdatePartnerDto updateDto)
+        public async Task<PartnerDto> UpdatePartnerAsync(int id, UpdatePartnerDto updateDto)
         {
             // TODO: Implement partner update logic
-            if (string.IsNullOrEmpty(id))
+            if (id <= 0)
             {
                 throw new ArgumentException("Partner ID is required");
             }
@@ -73,14 +73,14 @@ namespace Service.Services
             {
                 Id = id,
                 // Map updated properties
-                UpdatedAt = DateTime.UtcNow
+                LastSyncDate = DateTime.UtcNow
             };
         }
 
-        public async Task DeletePartnerAsync(string id)
+        public async Task DeletePartnerAsync(int id)
         {
             // TODO: Implement partner deletion
-            if (string.IsNullOrEmpty(id))
+            if (id <= 0)
             {
                 throw new ArgumentException("Partner ID is required");
             }
@@ -105,10 +105,10 @@ namespace Service.Services
             await Task.CompletedTask; // Placeholder
         }
 
-        public async Task<PartnerDto> GetPartnerByIdAsync(string id)
+        public async Task<PartnerDto> GetPartnerByIdAsync(int id)
         {
             // TODO: Implement get partner by ID
-            if (string.IsNullOrEmpty(id))
+            if (id <= 0)
             {
                 throw new ArgumentException("Partner ID is required");
             }
@@ -138,7 +138,7 @@ namespace Service.Services
 
             // 1. Build query based on request parameters
             // var query = _partnerRepository.GetQueryable();
-            
+
             // Apply filters based on request
             // if (!string.IsNullOrEmpty(request.Name))
             // {
@@ -195,9 +195,9 @@ namespace Service.Services
 
             return new PagedResult<PartnerDto>
             {
-                Data = new List<PartnerDto>(), // Replace with mapped data
+                Items = new List<PartnerDto>(), // Replace with mapped data
                 TotalCount = 0, // Replace with actual count
-                Page = request.Page ?? 1,
+                PageNumber = request.PageNumber ?? 1,
                 PageSize = request.PageSize ?? 10
             };
         }

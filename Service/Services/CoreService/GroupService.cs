@@ -1,10 +1,10 @@
 using Microsoft.Extensions.Caching.Memory;
 using Service.DTOs;
 using Service.DTOs.Common;
-using Service.Interfaces;
+using Service.Interfaces.CoreService;
 using System.Threading.Tasks;
 
-namespace Service.Services
+namespace Service.Services.CoreService
 {
     public class GroupService : IGroupService
     {
@@ -39,10 +39,10 @@ namespace Service.Services
             };
         }
 
-        public async Task<GroupDto> UpdateGroupAsync(string id, UpdateGroupNameDto updateDto)
+    public async Task<GroupDto> UpdateGroupAsync(int id, UpdateGroupNameDto updateDto)
         {
             // TODO: Implement group name update logic
-            if (string.IsNullOrEmpty(id))
+            if (id <= 0)
             {
                 throw new ArgumentException("Group ID is required");
             }
@@ -72,10 +72,10 @@ namespace Service.Services
             };
         }
 
-        public async Task<GroupDto> UpdateGroupFunctionsAsync(string id, UpdateGroupFunctionsDto updateDto)
+    public async Task<GroupDto> UpdateGroupFunctionsAsync(int id, UpdateGroupFunctionsDto updateDto)
         {
             // TODO: Implement group functions update logic
-            if (string.IsNullOrEmpty(id))
+            if (id <= 0)
             {
                 throw new ArgumentException("Group ID is required");
             }
@@ -106,10 +106,10 @@ namespace Service.Services
             };
         }
 
-        public async Task<GroupDto> UpdateGroupStatusAsync(string id, UpdateGroupStatusDto updateDto)
+    public async Task<GroupDto> UpdateGroupStatusAsync(int id, UpdateGroupStatusDto updateDto)
         {
             // TODO: Implement group status update logic
-            if (string.IsNullOrEmpty(id))
+            if (id <= 0)
             {
                 throw new ArgumentException("Group ID is required");
             }
@@ -139,10 +139,10 @@ namespace Service.Services
             };
         }
 
-        public async Task DeleteGroupAsync(string id)
+    public async Task DeleteGroupAsync(int id)
         {
             // TODO: Implement group deletion
-            if (string.IsNullOrEmpty(id))
+            if (id <= 0)
             {
                 throw new ArgumentException("Group ID is required");
             }
@@ -167,10 +167,10 @@ namespace Service.Services
             await Task.CompletedTask; // Placeholder
         }
 
-        public async Task<GroupDto> GetGroupByIdAsync(string id)
+    public async Task<GroupDto> GetGroupByIdAsync(int id)
         {
             // TODO: Implement get group by ID
-            if (string.IsNullOrEmpty(id))
+            if (id <= 0)
             {
                 throw new ArgumentException("Group ID is required");
             }
@@ -222,7 +222,10 @@ namespace Service.Services
 
             return new PagedResult<GroupDto>
             {
-                
+                Items = new List<GroupDto>(),
+                TotalCount = 0,
+                PageNumber = request.PageNumber ?? 1,
+                PageSize = request.PageSize ?? 10
             };
         }
     }

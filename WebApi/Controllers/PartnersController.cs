@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Service.DTOs;
-using Service.Interfaces;
+using Service.Interfaces.CoreService;
 using System.Threading.Tasks;
 
 namespace WebAPI.Controllers
@@ -24,21 +24,21 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdatePartner(string id, [FromBody] UpdatePartnerDto updateDto)
+    public async Task<IActionResult> UpdatePartner(int id, [FromBody] UpdatePartnerDto updateDto)
         {
             var result = await _partnerService.UpdatePartnerAsync(id, updateDto);
             return Ok(result);
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletePartner(string id)
+    public async Task<IActionResult> DeletePartner(int id)
         {
             await _partnerService.DeletePartnerAsync(id);
             return NoContent();
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetPartnerById(string id)
+    public async Task<IActionResult> GetPartnerById(int id)
         {
             var result = await _partnerService.GetPartnerByIdAsync(id);
             return Ok(result);

@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Service.DTOs;
-using Service.Interfaces;
+using Service.Interfaces.CoreService;
 using System.Threading.Tasks;
 
 namespace WebAPI.Controllers
@@ -31,7 +31,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateCategory(string id, [FromBody] UpdateCategoryDto updateDto)
+    public async Task<IActionResult> UpdateCategory(int id, [FromBody] UpdateCategoryDto updateDto)
         {
             var result = await _categoryService.UpdateCategoryAsync(id, updateDto);
             return Ok(result);
@@ -45,7 +45,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCategory(string id)
+    public async Task<IActionResult> DeleteCategory(int id)
         {
             await _categoryService.DeleteCategoryAsync(id);
             return NoContent();
@@ -59,7 +59,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetCategoryById(string id)
+    public async Task<IActionResult> GetCategoryById(int id)
         {
             var result = await _categoryService.GetCategoryByIdAsync(id);
             return Ok(result);

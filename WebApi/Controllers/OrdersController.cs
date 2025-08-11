@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Service.DTOs;
-using Service.Interfaces;
+using Service.Interfaces.CoreService;
 using System.Threading.Tasks;
 
 namespace WebAPI.Controllers
@@ -24,14 +24,14 @@ namespace WebAPI.Controllers
         }
 
         [HttpPatch("{id}/products")]
-        public async Task<IActionResult> UpdateOrderProducts(string id, [FromBody] UpdateOrderProductsDto updateDto)
+    public async Task<IActionResult> UpdateOrderProducts(int id, [FromBody] UpdateOrderProductsDto updateDto)
         {
             var result = await _orderService.UpdateOrderProductsAsync(id, updateDto);
             return Ok(result);
         }
 
         [HttpPatch("{id}/status")]
-        public async Task<IActionResult> UpdateOrderStatus(string id, [FromBody] UpdateOrderStatusDto updateDto)
+    public async Task<IActionResult> UpdateOrderStatus(int id, [FromBody] UpdateOrderStatusDto updateDto)
         {
             var result = await _orderService.UpdateOrderStatusAsync(id, updateDto);
             return Ok(result);
@@ -52,14 +52,14 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetOrderById(string id)
+    public async Task<IActionResult> GetOrderById(int id)
         {
             var result = await _orderService.GetOrderByIdAsync(id);
             return Ok(result);
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteOrder(string id)
+    public async Task<IActionResult> DeleteOrder(int id)
         {
             await _orderService.DeleteOrderAsync(id);
             return NoContent();

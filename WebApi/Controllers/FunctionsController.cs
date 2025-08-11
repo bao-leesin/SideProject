@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Service.DTOs;
-using Service.Interfaces;
+using Service.Interfaces.CoreService;
 using System.Threading.Tasks;
 
 namespace WebAPI.Controllers
@@ -31,7 +31,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateFunction(string id, [FromBody] UpdateFunctionDto updateDto)
+    public async Task<IActionResult> UpdateFunction(int id, [FromBody] UpdateFunctionDto updateDto)
         {
             var result = await _functionService.UpdateFunctionAsync(id, updateDto);
             return Ok(result);
@@ -45,14 +45,14 @@ namespace WebAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteFunction(string id)
+    public async Task<IActionResult> DeleteFunction(int id)
         {
             await _functionService.DeleteFunctionAsync(id);
             return NoContent();
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetFunctionById(string id)
+    public async Task<IActionResult> GetFunctionById(int id)
         {
             var result = await _functionService.GetFunctionByIdAsync(id);
             return Ok(result);

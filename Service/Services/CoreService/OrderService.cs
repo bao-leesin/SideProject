@@ -1,9 +1,9 @@
 using Service.DTOs;
 using Service.DTOs.Common;
-using Service.Interfaces;
+using Service.Interfaces.CoreService;
 using System.Threading.Tasks;
 
-namespace Service.Services
+namespace Service.Services.CoreService
 {
     public class OrderService : IOrderService
     {
@@ -20,7 +20,7 @@ namespace Service.Services
             // _mapper = mapper;
         }
 
-        public async Task<OrderDto> CreateOrderAsync(CreateOrderDto createDto)
+    public async Task<OrderDto> CreateOrderAsync(CreateOrderDto createDto)
         {
             // TODO: Implement order creation logic
             if (createDto == null)
@@ -37,16 +37,16 @@ namespace Service.Services
 
             return new OrderDto
             {
-                Id = Guid.NewGuid().ToString(), // Replace with actual ID from database
+                Id = 0,
                 // Map other properties from createDto
-                CreatedAt = DateTime.UtcNow
+                CreatedDate = DateTime.UtcNow
             };
         }
 
-        public async Task<OrderDto> UpdateOrderProductsAsync(string id, UpdateOrderProductsDto updateDto)
+        public async Task<OrderDto> UpdateOrderProductsAsync(int id, UpdateOrderProductsDto updateDto)
         {
             // TODO: Implement order products update logic
-            if (string.IsNullOrEmpty(id))
+            if (id <= 0)
             {
                 throw new ArgumentException("Order ID is required");
             }
@@ -81,10 +81,10 @@ namespace Service.Services
             };
         }
 
-        public async Task<OrderDto> UpdateOrderStatusAsync(string id, UpdateOrderStatusDto updateDto)
+        public async Task<OrderDto> UpdateOrderStatusAsync(int id, UpdateOrderStatusDto updateDto)
         {
             // TODO: Implement order status update logic
-            if (string.IsNullOrEmpty(id))
+            if (id <= 0)
             {
                 throw new ArgumentException("Order ID is required");
             }
@@ -124,20 +124,20 @@ namespace Service.Services
         public async Task<OrderDto[]> UpdateMultipleOrderStatusAsync(UpdateMultipleOrderStatusDto updateDto)
         {
             // TODO: Implement bulk order status update
-            if (updateDto?.OrderIds == null || updateDto.OrderIds.Length == 0)
+            if (updateDto?.OrderIds == null || updateDto.OrderIds.Count == 0)
             {
                 throw new ArgumentException("Order IDs are required");
             }
 
             var results = new List<OrderDto>();
-            
+
             foreach (var orderId in updateDto.OrderIds)
             {
                 var singleUpdateDto = new UpdateOrderStatusDto
                 {
                     Status = updateDto.Status
                 };
-                
+
                 var updatedOrder = await UpdateOrderStatusAsync(orderId, singleUpdateDto);
                 results.Add(updatedOrder);
             }
@@ -155,7 +155,7 @@ namespace Service.Services
 
             // 1. Build query based on request parameters
             // var query = _orderRepository.GetQueryable();
-            
+
             // Apply filters based on request
             // if (!string.IsNullOrEmpty(request.CustomerId))
             // {
@@ -187,17 +187,17 @@ namespace Service.Services
 
             return new PagedResult<OrderDto>
             {
-                Data = new List<OrderDto>(), // Replace with mapped data
+                Items = new List<OrderDto>(), // Replace with mapped data
                 TotalCount = 0, // Replace with actual count
-                Page = request.Page ?? 1,
+                PageNumber = request.PageNumber ?? 1,
                 PageSize = request.PageSize ?? 10
             };
         }
 
-        public async Task<OrderDto> GetOrderByIdAsync(string id)
+        public async Task<OrderDto> GetOrderByIdAsync(int id)
         {
             // TODO: Implement get order by ID
-            if (string.IsNullOrEmpty(id))
+            if (id <= 0)
             {
                 throw new ArgumentException("Order ID is required");
             }
@@ -217,10 +217,10 @@ namespace Service.Services
             };
         }
 
-        public async Task DeleteOrderAsync(string id)
+        public async Task DeleteOrderAsync(int id)
         {
             // TODO: Implement order deletion
-            if (string.IsNullOrEmpty(id))
+            if (id <= 0)
             {
                 throw new ArgumentException("Order ID is required");
             }
