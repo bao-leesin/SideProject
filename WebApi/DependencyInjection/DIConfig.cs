@@ -32,14 +32,16 @@ namespace WebAPI.DependencyInjection
 
             services.AddSingleton(minioSettings);
 
-            services.AddSingleton(sp =>
+            services.AddSingleton<IMinioClient>(sp =>
             {
                 return new MinioClient()
                     .WithEndpoint(minioSettings.Endpoint)
                     .WithCredentials(minioSettings.AccessKey, minioSettings.SecretKey)
-                    .WithSSL(minioSettings.WithSSL);
+                    .WithSSL(minioSettings.WithSSL)
+                    .Build();
             });
 
+            // ===== RabbitMq config =====
             var rabbitSettings = new RabbitMqConfiguration();
             configuration.GetSection(nameof(RabbitMqConfiguration)).Bind(rabbitSettings);
             services.AddSingleton(rabbitSettings);

@@ -1,9 +1,10 @@
-﻿using Infrastructure.Configuration;
+﻿using Domain.Messaging;
+using Infrastructure.Configuration;
 using RabbitMQ.Client;
 using System.Text;
 using System.Text.Json;
 
-public class RabbitMqPublisher : IAsyncDisposable
+public class RabbitMqPublisher : IAsyncDisposable, IMessagePublisher
 {
     private readonly RabbitMqConfiguration _config;
     private readonly IConnection _connection;
@@ -33,7 +34,7 @@ public class RabbitMqPublisher : IAsyncDisposable
         ).GetAwaiter().GetResult();
     }
 
-    public async Task PublishAsync(object message)
+    public async Task PublishAsync(MediaMessage message)
     {
         var body = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(message));
 

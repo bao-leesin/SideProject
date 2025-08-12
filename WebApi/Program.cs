@@ -1,3 +1,5 @@
+using Data.DependencyInjection;
+using Infrastructure.DependencyInjection;
 using Service.DependencyInjection;
 using WebAPI.Middleware;
 
@@ -17,11 +19,14 @@ builder.Services.AddResponseCaching();
 builder.Services.AddMemoryCache();
 
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
-WebAPI.DependencyInjection.DIConfig.ConfigureServices(builder.Services, builder.Configuration);
 Data.DependencyInjection.DIConfig.ConfigureServices(builder.Services, builder.Configuration);
-Service.DependencyInjection.ServiceCollectionExtension.AddCustomServices(builder.Services);
-Data.DependencyInjection.ServiceCollectionExtension.AddCustomServices(builder.Services);
-builder.Services.AddCustomServices();
+Infrastructure.DependencyInjection.DIConfig.ConfigureServices(builder.Services);
+WebAPI.DependencyInjection.DIConfig.ConfigureServices(builder.Services, builder.Configuration);
+
+builder.Services.AddInfrastructureLayer().AddDataLayer().AddServiceLayer();
+
+
+
 var app = builder.Build();
 
 app.UseExceptionHandler("/Error");
@@ -31,7 +36,10 @@ app.UseHsts();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+    });
 }
 
 app.UseHttpsRedirection();

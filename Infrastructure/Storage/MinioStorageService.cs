@@ -12,10 +12,10 @@ namespace Infrastructure.Storage
 {
     public class MinioStorageService : IStorageService
     {
-        private readonly MinioClient _minio;
+        private readonly IMinioClient _minio;
         private readonly MinIOConfiguration _config;
 
-        public MinioStorageService(MinioClient minio, MinIOConfiguration config)
+        public MinioStorageService(IMinioClient minio, MinIOConfiguration config)
         {
             _minio = minio;
             _config = config;

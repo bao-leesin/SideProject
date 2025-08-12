@@ -60,10 +60,13 @@ namespace Infrastructure.Messaging
 
                     _logger.LogInformation("Processing file: {File}", msg.ObjectName);
 
-                    using var stream = File.OpenRead(msg.TempPath);
-                    await _storage.UploadAsync(stream, msg.ObjectName, msg.ContentType, msg.Size);
+                    using (var stream = File.OpenRead(msg.TempPath))
+                    {
+                        await _storage.UploadAsync(stream, msg.ObjectName, msg.ContentType, msg.Size);
+                    }
 
-                    File.Delete(msg.TempPath);
+                    if (File.Exists(msg.TempPath))
+                        File.Delete(msg.TempPath);
                     await _channel.BasicAckAsync(ea.DeliveryTag, false);
                 }
                 catch (Exception ex)

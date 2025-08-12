@@ -2,11 +2,12 @@
 using Microsoft.AspNetCore.Http;
 using Service.Interfaces;
 
+namespace Service.Services;
 public class MediaService : IMediaService
 {
-    private readonly RabbitMqPublisher _publisher;
+    private readonly IMessagePublisher _publisher;
 
-    public MediaService(RabbitMqPublisher publisher)
+    public MediaService(IMessagePublisher publisher)
     {
         _publisher = publisher;
     }

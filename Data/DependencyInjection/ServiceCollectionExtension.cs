@@ -8,7 +8,7 @@ namespace Data.DependencyInjection
 {
     public static class ServiceCollectionExtension
     {
-        public static IServiceCollection AddCustomServices(this IServiceCollection services)
+        public static IServiceCollection AddDataLayer(this IServiceCollection services)
         {
             // Repositories
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
