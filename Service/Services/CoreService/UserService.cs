@@ -1,3 +1,4 @@
+using Data.Repositories.Interface;
 using Service.DTOs;
 using Service.DTOs.Common;
 using Service.Interfaces.CoreService;
@@ -8,19 +9,21 @@ namespace Service.Services.CoreService
     public class UserService : IUserService
     {
         // Dependencies would typically include IUserRepository, IMapper, IPasswordHasher, etc.
-        // private readonly IUserRepository _userRepository;
+        private readonly IUserRepository _userRepository;
         // private readonly IMapper _mapper;
         // private readonly IPasswordHasher _passwordHasher;
         // private readonly ICurrentUserService _currentUserService;
 
-        public UserService()
+        public UserService(IUserRepository userRepository)
         {
             // Constructor injection would happen here
-            // _userRepository = userRepository;
+            _userRepository = userRepository;
             // _mapper = mapper;
             // _passwordHasher = passwordHasher;
             // _currentUserService = currentUserService;
         }
+
+        public event EventHandler<UserEventArgs> UserCreated;
 
         public async Task<UserDto> CreateUserAsync(UserCreateDto createDto)
         {
@@ -29,6 +32,13 @@ namespace Service.Services.CoreService
             {
                 throw new ArgumentNullException(nameof(createDto));
             }
+
+            _userRepository.AddAsync(new User
+            {
+                // Map properties from createDto
+            });
+
+
 
             // 1. Validate input
             // 2. Check if user already exists

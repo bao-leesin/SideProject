@@ -1,5 +1,6 @@
 using Service.DTOs;
 using Service.DTOs.Common;
+using Service.Services.CoreService;
 using System.Threading.Tasks;
 
 namespace Service.Interfaces.CoreService
@@ -11,5 +12,7 @@ namespace Service.Interfaces.CoreService
     Task DeletePartnerAsync(int id);
     Task<PartnerDto> GetPartnerByIdAsync(int id);
         Task<PagedResult<PartnerDto>> GetPartnersAsync(GetPartnerRequest request);
+
+        event EventHandler<PartnerEventArgs> PartnerCreated;
     }
 }

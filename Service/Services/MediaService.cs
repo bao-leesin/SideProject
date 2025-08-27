@@ -48,4 +48,9 @@ public class MediaService : IMediaService
             throw new Exception($"Upload request failed: {ex.Message}");
         }
     }
+
+    private long GetAvaliableMemory()
+    {
+        return GC.GetGCMemoryInfo().TotalAvailableMemoryBytes;
+    }
 }

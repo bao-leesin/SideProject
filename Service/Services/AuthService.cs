@@ -21,12 +21,14 @@ namespace Service.Services
 
         public async Task<AuthResponseDto> LoginAsync(LoginDto loginDto)
         {
+
             // TODO: Implement authentication logic
             // 1. Validate input
             if (string.IsNullOrEmpty(loginDto.Email) || string.IsNullOrEmpty(loginDto.Password))
             {
                 throw new ArgumentException("Email and password are required");
             }
+
 
             // 2. Find user by email
             // var user = await _userRepository.GetByEmailAsync(loginDto.Email);

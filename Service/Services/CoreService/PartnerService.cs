@@ -18,13 +18,23 @@ namespace Service.Services.CoreService
             // _mapper = mapper;
         }
 
-    public async Task<PartnerDto> CreatePartnerAsync(CreatePartnerDto createDto)
+        public event EventHandler<PartnerEventArgs> PartnerCreated;
+
+        public async Task<PartnerDto> CreatePartnerAsync(CreatePartnerDto createDto)
         {
             // TODO: Implement partner creation logic
             if (createDto == null)
             {
                 throw new ArgumentNullException(nameof(createDto));
             }
+
+            var eventArgs = new PartnerEventArgs(new PartnerDto
+            {
+                // Map properties from createDto
+            });
+
+            OnPartnerCreated(eventArgs);
+
 
             // 1. Validate input
             // 2. Check if partner already exists (by email, tax ID, etc.)
@@ -38,6 +48,11 @@ namespace Service.Services.CoreService
                 // Map other properties from createDto
                 CreatedDate = DateTime.UtcNow
             };
+        }
+
+        protected virtual void OnPartnerCreated(PartnerEventArgs e)
+        {
+    `         PartnerCreated?.Invoke(this, e);
         }
 
         public async Task<PartnerDto> UpdatePartnerAsync(int id, UpdatePartnerDto updateDto)
