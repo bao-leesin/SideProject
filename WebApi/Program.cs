@@ -1,10 +1,14 @@
 using Data.DependencyInjection;
 using Infrastructure.DependencyInjection;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Service.DependencyInjection;
+using WebAPI.DependencyInjection;
+using WebAPI.HealthChecks;
 using WebAPI.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCustomHealthChecks(builder.Configuration);
 
 //builder.Services.AddLogging(builder => builder.AddSerilog(dispose: true));
 
@@ -23,13 +27,44 @@ Data.DependencyInjection.DIConfig.ConfigureServices(builder.Services, builder.Co
 Infrastructure.DependencyInjection.DIConfig.ConfigureServices(builder.Services);
 WebAPI.DependencyInjection.DIConfig.ConfigureServices(builder.Services, builder.Configuration);
 
-builder.Services.AddInfrastructureLayer().AddDataLayer().AddServiceLayer();
+builder.Services
+    .AddInfrastructureLayer()
+    .AddDataLayer()
+    .AddServiceLayer()
+    ;
 
 
 
 var app = builder.Build();
 
 app.UseExceptionHandler("/Error");
+
+app.UseHealthChecks("/health", new HealthCheckOptions
+{
+    ResponseWriter = async (context, report) =>
+    {
+     
+
+        // Write the response as JSON
+        var result = System.Text.Json.JsonSerializer.Serialize(new
+        {
+            status = report.Status.ToString(),
+            checks = report.Entries.Select(e => new
+            {
+                name = e.Key,
+                status = e.Value.Status.ToString(),
+                description = e.Value.Description,
+                duration = e.Value.Duration.TotalMilliseconds
+            }),
+            totalDuration = report.TotalDuration.TotalMilliseconds
+        });
+
+        context.Response.ContentType = "application/json";
+        await context.Response.WriteAsync(result);
+    }
+});
+
+
 app.UseHsts();
 
 // Configure the HTTP request pipeline.
