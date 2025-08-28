@@ -52,7 +52,7 @@ namespace Service.Services.CoreService
 
         protected virtual void OnPartnerCreated(PartnerEventArgs e)
         {
-    `         PartnerCreated?.Invoke(this, e);
+            PartnerCreated?.Invoke(this, e);
         }
 
         public async Task<PartnerDto> UpdatePartnerAsync(int id, UpdatePartnerDto updateDto)
