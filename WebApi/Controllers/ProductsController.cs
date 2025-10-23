@@ -12,13 +12,11 @@ namespace WebAPI.Controllers
     public class ProductsController : ControllerBase
     {
         private readonly IProductService _productService;
-        private readonly IMediaService _mediaService;
 
         public ProductsController(
-            IProductService productService, IMediaService mediaService)
+            IProductService productService)
         {
             _productService = productService;
-            _mediaService = mediaService;
         }
 
         [HttpPost]
@@ -71,7 +69,6 @@ namespace WebAPI.Controllers
                 return BadRequest("No file uploaded.");
             }
 
-            await _mediaService.UploadVideoAsync();
             return NoContent();
         }
 
