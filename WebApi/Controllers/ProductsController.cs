@@ -10,11 +10,12 @@ namespace WebAPI.Controllers
     [Route("api/[controller]")]
     public class ProductsController : ControllerBase
     {
-        private readonly IMediaService _mediaService;
+        private readonly IProductService _productService;
 
-        public ProductsController(IMediaService mediaService)
+        public ProductsController(
+            IProductService productService)
         {
-            _mediaService = mediaService;
+            _productService = productService;
         }
 
         [HttpPost("upload")]
@@ -26,15 +27,7 @@ namespace WebAPI.Controllers
                 return BadRequest("No file uploaded.");
             }
 
-            try
-            {
-                var result = await _mediaService.UploadFileAsync(file);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Upload failed: {ex.Message}");
-            }
+            return NoContent();
         }
     }
 }
