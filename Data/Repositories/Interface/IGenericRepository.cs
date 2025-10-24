@@ -16,7 +16,7 @@ namespace Data.Repositories.Interface
         Task<bool> ExistsAsync(Expression<Func<T, bool>> predicate, CancellationToken ct = default);
 
         // Write
-        Task<T> AddAsync(T entity, CancellationToken ct = default);
+        Task<T> AddAsync(T entity, CancellationToken ct = default, bool saving = true);
         Task AddRangeAsync(IEnumerable<T> entities, CancellationToken ct = default);
         void Update(T entity);
         void UpdateRange(IEnumerable<T> entities);

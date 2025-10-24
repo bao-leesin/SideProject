@@ -33,7 +33,7 @@ namespace Data.Repositories
         public async Task<bool> ExistsAsync(Expression<Func<T, bool>> predicate, CancellationToken ct = default)
             => await _set.AnyAsync(predicate, ct);
 
-        public async Task<T> AddAsync(T entity, CancellationToken ct = default)
+        public async Task<T> AddAsync(T entity, CancellationToken ct = default, bool saving = true)
         {
             await _set.AddAsync(entity, ct);
             return entity;
@@ -56,5 +56,7 @@ namespace Data.Repositories
 
         public Task<int> SaveChangesAsync(CancellationToken ct = default)
             => _db.SaveChangesAsync(ct);
+
+
     }
 }

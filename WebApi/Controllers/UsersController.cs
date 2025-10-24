@@ -1,3 +1,4 @@
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Service.DTOs;
 using Service.Interfaces.CoreService;
@@ -10,6 +11,7 @@ namespace WebAPI.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
+        private readonly IValidator<UserCreateDto> _createValidator;
 
         public UsersController(IUserService userService)
         {
@@ -19,6 +21,19 @@ namespace WebAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateUser([FromBody] UserCreateDto createDto)
         {
+            if (createDto is null)
+            {
+                return BadRequest("User creation data cannot be null.");
+            }
+
+            // Validate the DTO using FluentValidation
+
+            var validationResult = await _createValidator.ValidateAsync(createDto);
+
+            if (!validationResult.IsValid)
+            {
+                return BadRequest(validationResult.Errors);
+            }
             var result = await _userService.CreateUserAsync(createDto);
             return Ok(result);
         }

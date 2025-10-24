@@ -6,5 +6,7 @@ namespace Data.Repositories.Entities
     public class UserRepository : Repository<User>, IUserRepository
     {
         public UserRepository(AppDbContext db) : base(db) { }
+
+        
     }
 }
