@@ -1,39 +1,59 @@
 pipeline {
     agent any
     
+    environment {
+        IMAGE_NAME = 'sideproject'
+        CONTAINER_NAME = 'sideproject-app'
+        HOST_PORT = '5000'
+        CONTAINER_PORT = '80'
+    }
+    
     stages {
         stage('Checkout') {
             steps {
+                echo 'Checking out code from GitHub...'
                 checkout scm
             }
         }
         
-        stage('Build') {
+        stage('Build Docker Image') {
             steps {
-                sh 'dotnet restore'
-                sh 'dotnet build --configuration Release'
+                echo 'Building Docker image...'
+                sh "docker build -t ${IMAGE_NAME}:latest ."
             }
         }
         
-        stage('Test') {
+        stage('Stop Old Container') {
             steps {
-                sh 'dotnet test'
+                echo 'Stopping old container if exists...'
+                sh "docker stop ${CONTAINER_NAME} || true"
+                sh "docker rm ${CONTAINER_NAME} || true"
             }
         }
         
-        stage('Publish') {
+        stage('Deploy') {
             steps {
-                sh 'dotnet publish -c Release -o ./publish'
+                echo 'Starting new container...'
+                sh "docker run -d --name ${CONTAINER_NAME} -p ${HOST_PORT}:${CONTAINER_PORT} ${IMAGE_NAME}:latest"
+                echo "Application deployed at http://localhost:${HOST_PORT}"
+            }
+        }
+        
+        stage('Verify Deployment') {
+            steps {
+                echo 'Verifying container is running...'
+                sh "docker ps | grep ${CONTAINER_NAME}"
             }
         }
     }
     
     post {
         success {
-            echo 'Pipeline succeeded!'
+            echo '✅ Pipeline succeeded! Application is running.'
+            echo "Access your app at: http://localhost:${HOST_PORT}"
         }
         failure {
-            echo 'Pipeline failed!'
+            echo '❌ Pipeline failed! Check the logs above.'
         }
     }
 }
