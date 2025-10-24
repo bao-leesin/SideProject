@@ -3,7 +3,6 @@ using Infrastructure.DependencyInjection;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Service.DependencyInjection;
 using WebAPI.DependencyInjection;
-using WebAPI.HealthChecks;
 using WebAPI.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -43,7 +42,7 @@ app.UseHealthChecks("/health", new HealthCheckOptions
 {
     ResponseWriter = async (context, report) =>
     {
-     
+
 
         // Write the response as JSON
         var result = System.Text.Json.JsonSerializer.Serialize(new

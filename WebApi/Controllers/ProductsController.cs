@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Service.Interfaces;
 using System.Threading.Tasks;
 using WebAPI.Model;
+using Service.Interfaces.CoreService;
 
 namespace WebAPI.Controllers
 {
